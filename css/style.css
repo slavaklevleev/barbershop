@@ -33,6 +33,23 @@ p {
   font-size: 14px;
 }
 
+/* Table */
+table {
+  background-color: white;
+  border-collapse: collapse;
+}
+
+table tr td,
+table tr th {
+  border: 1px solid black;
+  padding: 5px;
+  text-align: left;
+}
+
+table th {
+  background-color: rgb(219, 226, 235);
+}
+
 /* header decoration */
 /* Работа с шапкой сайта */
 header {
@@ -225,6 +242,58 @@ button {
   padding: 0 15px;
 }
 
+/* Выпадающий список */
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  appearance: none;
+  background: white;
+  flex: 1;
+  padding: 0 0.5em;
+  color: black;
+  cursor: pointer;
+  border: 0 !important;
+  font-size: 16px;
+}
+
+.input-group .select {
+  position: relative;
+  display: flex;
+  width: 326px;
+  height: 36px;
+  line-height: 2;
+  overflow: hidden;
+  border-radius: 10px;
+  border: 3px solid #dbe2eb;
+}
+
+.input-group .select::after {
+  content: "\25BC";
+  position: absolute;
+  color: #dbe2eb;
+  top: 4px;
+  right: 0;
+  padding: 0 1em;
+  background: #fff;
+  cursor: pointer;
+  pointer-events: none;
+}
+
+/* Checkbox */
+.input-group#chkbox {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+input#checkbox {
+  width: max-content;
+  margin-right: 10px;
+}
+
+
 /* Ошибки */
 .error {
   margin: 5px auto;
@@ -232,6 +301,63 @@ button {
   background-color: #ff9797;
   border-radius: 20px;
   width: 250px;
+}
+
+/* ВСПЛЫВАЮЩЕЕ ОКНО */
+.overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+  transition: opacity 500ms;
+  visibility: hidden;
+  opacity: 0;
+}
+.overlay:target {
+  visibility: visible;
+  opacity: 1;
+}
+
+.popup {
+  margin: 70px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 5px;
+  width: 50%;
+  position: relative;
+  transition: all 5s ease-in-out;
+}
+
+.popup h2 {
+  margin-top: 0;
+  color: #333;
+  font-family: Tahoma, Arial, sans-serif;
+}
+.popup .close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  transition: all 200ms;
+  font-size: 30px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #333;
+}
+.popup .close:hover {
+  color: #06d85f;
+}
+.popup .popupContent {
+  max-height: 30%;
+  overflow: auto;
+}
+.popup .popupContent p {
+  margin-bottom: 10px;
+}
+
+.popupContent table {
+  margin: 10px auto;
 }
 
 /* СТАРТОВАЯ СТРАНИЦА */
@@ -430,6 +556,11 @@ blockquote p {
 
 .examples .icon#cost::before {
   background-image: url(/img/coins.png);
+}
+
+/* Подтверждение записи */
+.entry_confirm table {
+  margin: 20px auto;
 }
 
 /* МЕДИА-ЗАПРОСЫ */

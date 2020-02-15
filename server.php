@@ -3,10 +3,11 @@ session_start();
 
 // formating phone number
 // форматирование телефонного номера
-function phone_number_format($number) {
+function phone_number_format($number)
+{
     $number = preg_replace("/[^\d]/", "", $number);
     $length = strlen($number);
-    
+
     if ($length == 10) {
         $number = preg_replace("/^1?(\d{3})(\d{3})(\d{2})(\d{2})$/", "+7 ($1) $2-$3-$4", $number);
     }
@@ -20,6 +21,14 @@ $name = "";
 $last_name = "";
 $email = "";
 $tel = "";
+
+$barber = "";
+$service = "";
+$entry_date = "";
+$entry_time = "";
+$comment = "";
+
+$debiting_bonuses = false;
 $errors = array();
 
 // connect to the database 
@@ -142,4 +151,102 @@ if (isset($_POST['login_user'])) {
             array_push($errors, "Неверный E-mail или пароль");
         }
     }
+}
+
+//Онлайн-запись от пользователя
+if (isset($_POST['entry_user'])) {
+    // receive all input values from the form 
+    // получение переменных из формы
+    $barber = mysqli_real_escape_string($db, $_POST['barber']);
+    $service = mysqli_real_escape_string($db, $_POST['service']);
+    $entry_date = mysqli_real_escape_string($db, $_POST['entry_date']);
+    $entry_time = mysqli_real_escape_string($db, $_POST['entry_time']);
+
+    // form validation
+    // проверка ввода данных
+    if ($barber == "0") {
+        array_push($errors, "Выберете мастера");
+    }
+    if ($service == "0") {
+        array_push($errors, "Выберете услугу");
+    }
+    if (empty($entry_date)) {
+        array_push($errors, "Введите дату");
+    } elseif (strtotime($entry_date) < strtotime("now")) {
+        array_push($errors, "Введите будущую дату");
+    }
+    if (empty($entry_time)) {
+        array_push($errors, "Введите время");
+    } elseif (strtotime($entry_time) < strtotime("9:00:00") or strtotime($entry_time) > strtotime("20:00:00")) {
+        array_push($errors, "Парикмахерская не работает в данное время");
+    }
+
+    if (count($errors) == 0) {
+        $barber_data = mysqli_fetch_array(mysqli_query($db, "SELECT `id`, CONCAT(`name`, ' ', `last_name`) AS f_name FROM `users` WHERE `id` = $barber"));
+        $client_data = mysqli_fetch_array(mysqli_query($db, "SELECT `id`, CONCAT(`name`, ' ', `last_name`) AS f_name FROM `users` WHERE `id` = {$_SESSION['id']}"));
+        $service_data = mysqli_fetch_array(mysqli_query($db, "SELECT `id`, `name`, `price` FROM `services` WHERE `id` = $service"));
+
+        if (isset($_POST['checkbox'])) {
+            $min_amonut = $service_data['price'] * 0.25;
+            if ($service_data['price'] - $_SESSION['bonuses'] < $min_amonut) {
+                $cost = $min_amonut;
+                $bonuses = $_SESSION['bonuses'] - ($service['price'] - $min_amonut);
+            } else {
+                $cost = $service_data['price'] - $_SESSION['bonuses'];
+                $bonuses = 0;
+            }
+            $debiting_bonuses = true;
+        } else {
+            $cost = $service_data['price'];
+            $bonuses = $_SESSION['bonuses'];
+            $debiting_bonuses = false;
+        } 
+    }
+}
+
+//Подтверждение записи
+if (isset($_POST['entry_confirm'])) {
+    $client = mysqli_real_escape_string($db, $_POST['client']);
+    $service = mysqli_real_escape_string($db, $_POST['service']);
+    $barber = mysqli_real_escape_string($db, $_POST['barber']);
+    $date = date("Y-m-d", strtotime(mysqli_real_escape_string($db, $_POST['date']))); 
+    $time = mysqli_real_escape_string($db, $_POST['time']);
+    $price = mysqli_real_escape_string($db, $_POST['price']);
+    $cost = mysqli_real_escape_string($db, $_POST['cost']);
+    $bonuses = mysqli_real_escape_string($db, $_POST['bonuses']);
+    $comment = mysqli_real_escape_string($db, $_POST['comment']);
+    $query = "INSERT INTO `entries` (`client`, `service`, `barber`, `date`, `time`, `cost`, `comment`, `visit`, `accrual`) 
+        VALUES ('$client',  '$service', '$barber', '$date', '$time', '$cost', '$comment', '0', '0')";
+    mysqli_query($db, $query) or die("Ошибка при записи " . mysqli_error($db));
+
+    if ($_POST['debiting_bonuses']) {
+        $min_amonut = $service_data['price'] * 0.25;
+        if ($service_data['price'] - $_SESSION['bonuses'] < $min_amonut) {
+            $cost = $min_amonut;
+        } else {
+            $cost = $service_data['price'] - $_SESSION['bonuses'];
+        }
+        $_SESSION['bonuses'] = $bonuses;
+        $query_bonuses = "UPDATE `users` SET `bonuses`='{$_SESSION['bonuses']}' WHERE `id`= '{$_POST['client']}'";
+        mysqli_query($db, $query_bonuses) or die("Ошибка при изменении баланса бонусов" . mysqli_error($db));
+    }
+
+    switch ($_SESSION['user-type']) {
+        case '2':
+            $lkLink = "/lk/client/lk.php";
+            break;
+        case '3':
+            $lkLink = "/lk/barber/lk.php";
+            break;
+        case '4':
+            $lkLink = "/lk/admin/lk.php";
+            break;
+        case '5':
+            $lkLink = "/lk/superadmin/lk.php";
+            break;
+        default:
+            break;
+    }
+
+    header('location: ' . $lkLink);
 }
