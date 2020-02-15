@@ -216,7 +216,7 @@ if (isset($_POST['entry_confirm'])) {
     $bonuses = mysqli_real_escape_string($db, $_POST['bonuses']);
     $comment = mysqli_real_escape_string($db, $_POST['comment']);
     $query = "INSERT INTO `entries` (`client`, `service`, `barber`, `date`, `time`, `cost`, `comment`, `visit`, `accrual`) 
-        VALUES ('$client',  '$service', '$barber', '$date', '$time', '$cost', '$comment', '0', '0')";
+        VALUES ('$client', '$service', '$barber', '$date', '$time', '$cost', '$comment', '0', '0')";
     mysqli_query($db, $query) or die("Ошибка при записи " . mysqli_error($db));
 
     if ($_POST['debiting_bonuses']) {
@@ -249,4 +249,14 @@ if (isset($_POST['entry_confirm'])) {
     }
 
     header('location: ' . $lkLink);
+}
+
+//ОТЗЫВ
+if (isset($_POST['feedback'])) {
+    $entry = mysqli_real_escape_string($db, $_POST['entry']);
+    $mark = mysqli_real_escape_string($db, $_POST['rating-star']);
+    $review = mysqli_real_escape_string($db, $_POST['review']);
+
+    $query = "INSERT INTO `feedback`(`entry`, `mark`, `review`, `verified`) VALUES ('$entry', '$mark', '$review', '0')";
+    mysqli_query($db, $query) or die("Ошибка при записи отзыва" . mysqli_error($db));
 }
