@@ -655,6 +655,38 @@ blockquote p {
   margin: 20px auto;
 }
 
+/* Страница новостей */
+.article {
+  display: flex;
+  align-items: center;
+  text-align: justify;
+  margin: 20px 0;
+}
+
+.article .header {
+  display: inline-flex;
+}
+
+.article img {
+  width: 200px;
+  margin: 0 10px;
+}
+
+.article .icon {
+  width: 13px;
+  margin: 0 5px;
+}
+
+/* Страница новости */
+.article_full {
+  text-align: justify;
+}
+.article_full img {
+  width: 200px;
+  margin-right: 25px;
+  float: left;
+}
+
 /* МЕДИА-ЗАПРОСЫ */
 @media only screen and (max-width: 1400px) {
   .barber#img3 {
