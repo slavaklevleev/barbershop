@@ -772,6 +772,14 @@ blockquote p {
   width: 70%;
 }
 
+/* ЛИЧНЫЙ КАБИНЕТ ПАРИКМАХЕРА */
+.barberSchedule table {
+  margin: 15px auto;
+}
+
+.barberSchedule {
+  margin: 15px;
+}
 /* МЕДИА-ЗАПРОСЫ */
 @media only screen and (max-width: 1400px) {
   .barber#img3 {
