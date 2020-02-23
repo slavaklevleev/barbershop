@@ -153,6 +153,43 @@ if (isset($_POST['login_user'])) {
     }
 }
 
+// CHANGE USER DATA
+// Редактирование профиля пользователя
+if (isset($_POST['changeUserDataConfirmed'])) {
+    // receive all input values from the form 
+    // получение переменных из формы
+    $name = mysqli_real_escape_string($db, $_POST['name']);
+    $last_name = mysqli_real_escape_string($db, $_POST['last_name']);
+    $tel = mysqli_real_escape_string($db, $_POST['tel']);
+    $email = mysqli_real_escape_string($db, $_POST['email']);
+
+    // form validation
+    // проверка ввода данных
+    if (empty($name)) {
+        array_push($errors, "Введите имя");
+    }
+    if (empty($last_name)) {
+        array_push($errors, "Введите фамилию");
+    }
+    if ($tel == "+7 (___) ___-__-__") {
+        array_push($errors, "Введите телефон");
+    }
+    if (empty($email)) {
+        array_push($errors, "Введите E-mail");
+    }
+
+    if (count($errors) == 0) {
+        $query = "UPDATE `users` SET `name`='$name',`last_name`='$last_name',`email`='$email',`tel`='$tel' WHERE id = $_SESSION[id]";
+        $results = mysqli_query($db, $query);
+
+        $_SESSION['name'] = $name;
+        $_SESSION['last_name'] = $last_name;
+        $_SESSION['tel'] = $tel;
+        $_SESSION['email'] = $email;
+    }
+}
+
+
 //Онлайн-запись от пользователя
 if (isset($_POST['entry_user'])) {
     // receive all input values from the form 
@@ -200,7 +237,7 @@ if (isset($_POST['entry_user'])) {
             $cost = $service_data['price'];
             $bonuses = $_SESSION['bonuses'];
             $debiting_bonuses = false;
-        } 
+        }
     }
 }
 
@@ -209,7 +246,7 @@ if (isset($_POST['entry_confirm'])) {
     $client = mysqli_real_escape_string($db, $_POST['client']);
     $service = mysqli_real_escape_string($db, $_POST['service']);
     $barber = mysqli_real_escape_string($db, $_POST['barber']);
-    $date = date("Y-m-d", strtotime(mysqli_real_escape_string($db, $_POST['date']))); 
+    $date = date("Y-m-d", strtotime(mysqli_real_escape_string($db, $_POST['date'])));
     $time = mysqli_real_escape_string($db, $_POST['time']);
     $price = mysqli_real_escape_string($db, $_POST['price']);
     $cost = mysqli_real_escape_string($db, $_POST['cost']);
