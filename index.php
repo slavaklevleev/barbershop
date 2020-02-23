@@ -13,16 +13,16 @@ require 'db.php';
 if (isset($_SESSION['email'])) {
     switch ($_SESSION['user-type']) {
         case '2':
-            $lkLink = "/lk/client/lk.php";
+            $lkLink = "/users/client/lk.php";
             break;
         case '3':
-            $lkLink = "/lk/barber/lk.php";
+            $lkLink = "/users/barber/lk.php";
             break;
         case '4':
-            $lkLink = "/lk/admin/lk.php";
+            $lkLink = "/users/admin/lk.php";
             break;
         case '5':
-            $lkLink = "/lk/superadmin/lk.php";
+            $lkLink = "/users/superadmin/lk.php";
             break;
         default:
             break;
