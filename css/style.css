@@ -780,6 +780,17 @@ blockquote p {
 .barberSchedule {
   margin: 15px;
 }
+
+/* ЛИЧНЫЙ КАБИНЕТ АДМИНИСТРАТОРА */
+.menuAdmin {
+  display: flex;
+  flex-direction: column;
+}
+
+.menuAdmin button,
+.menuAdmin a {
+  width: 250px;
+}
 /* МЕДИА-ЗАПРОСЫ */
 @media only screen and (max-width: 1400px) {
   .barber#img3 {
