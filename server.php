@@ -28,6 +28,10 @@ $entry_date = "";
 $entry_time = "";
 $comment = "";
 
+$price = "";
+$description = "";
+$time = "";
+
 $debiting_bonuses = false;
 $errors = array();
 
@@ -296,4 +300,62 @@ if (isset($_POST['feedback'])) {
 
     $query = "INSERT INTO `feedback`(`entry`, `mark`, `review`, `verified`) VALUES ('$entry', '$mark', '$review', '0')";
     mysqli_query($db, $query) or die("Ошибка при записи отзыва" . mysqli_error($db));
+}
+
+//Добавление услуги
+if (isset($_POST['add_service'])) {
+    $name = mysqli_real_escape_string($db, $_POST['name']);
+    $price = mysqli_real_escape_string($db, $_POST['price']);
+    $description = mysqli_real_escape_string($db, $_POST['description']);
+    $time = mysqli_real_escape_string($db, $_POST['time']);
+
+    if (empty($name)) {
+        array_push($errors, "Введите имя");
+    }
+    if (empty($price)) {
+        array_push($errors, "Введите цену");
+    }
+    if (empty($description)) {
+        array_push($errors, "Введите описание");
+    }
+    if (empty($time)) {
+        array_push($errors, "Введите время");
+    }
+
+    if (count($errors) == 0) { {
+            $query = "INSERT INTO `services` (`name`, `price`, `description`, `time`) VALUES ('$name', '$price', '$description', '$time')";
+            mysqli_query($db, $query) or die("Ошибка при добавлении услуги" . mysqli_error($db));
+        }
+
+        header('location: services.php');
+    }
+}
+
+//Редактирование услуги
+if (isset($_POST['edit_service'])) {
+    $id = mysqli_real_escape_string($db, $_POST['id']);
+    $name = mysqli_real_escape_string($db, $_POST['name']);
+    $price = mysqli_real_escape_string($db, $_POST['price']);
+    $description = mysqli_real_escape_string($db, $_POST['description']);
+    $time = mysqli_real_escape_string($db, $_POST['time']);
+
+    if (empty($name)) {
+        array_push($errors, "Введите имя");
+    }
+    if (empty($price)) {
+        array_push($errors, "Введите цену");
+    }
+    if (empty($description)) {
+        array_push($errors, "Введите описание");
+    }
+    if (empty($time)) {
+        array_push($errors, "Введите время");
+    }
+
+    if (count($errors) == 0) {
+        $query = "UPDATE `services` SET `name`='$name',`price`='$price',`description`='$description',`time`='$time' WHERE `id`= '$id'";
+        mysqli_query($db, $query) or die("Ошибка при редактировании услуги" . mysqli_error($db));
+    }
+
+    header('location: services.php');
 }

@@ -792,6 +792,15 @@ blockquote p {
   width: 250px;
 }
 
+.admin#info {
+  padding: 10px;
+  margin: 10px auto;
+  background-color: lightblue;
+  border-radius: 10px;
+  height: max-content;
+  width: max-content;
+}
+
 /* Расписание */
 .table-scroll {
   position: relative;
@@ -852,15 +861,6 @@ blockquote p {
   white-space: normal;
 }
 
-.schedule .admin#info {
-  padding: 10px;
-  margin: 10px auto;
-  background-color: lightblue;
-  border-radius: 10px;
-  height: max-content;
-  width: max-content;
-}
-
 /* Страница с подробностями записи */
 .entryInfoPage table {
   margin: 10px auto;
@@ -873,6 +873,16 @@ blockquote p {
 .entryInfoPage .visit th,
 .entryInfoPage .visit td {
   text-align: center;
+}
+
+/* Услуги */
+.services table th,
+.services table td {
+  text-align: center;
+}
+
+.services table .symbol {
+  font-size: 1.8em;
 }
 /* МЕДИА-ЗАПРОСЫ */
 @media only screen and (max-width: 1400px) {
